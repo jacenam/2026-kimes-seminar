@@ -1,8 +1,15 @@
-@import "tailwindcss";
+// Carbon Design System
+@use '@carbon/react';
+
+// Pretendard Font
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css');
 
 :root {
   --color-primary: #2FD096;
+  --color-primary-light: #e6faf1;
+  --color-primary-dark: #1a8a5c;
+  --color-bg-dark: #0f172a;
+  --color-bg-dark-secondary: #1e293b;
   --font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
 }
 
@@ -12,7 +19,9 @@
   box-sizing: border-box;
 }
 
-html, body {
+html, body, #root {
   font-family: var(--font-family);
-  overflow-x: hidden;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
 }

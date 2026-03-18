@@ -272,6 +272,16 @@
 
 ---
 
+## Carbon Design System 사용 규칙
+
+- 모든 UI 컴포넌트는 `@carbon/react`에서 가져온다.
+- 아이콘은 `@carbon/icons-react`를 사용한다.
+- 색상, 간격, 타이포그래피는 Carbon의 Design Tokens(`$carbon--blue-60` 등)을 사용하며, 직접적인 Hex code 사용은 지양한다.
+- 레이아웃은 Carbon의 Grid 시스템(`Column`, `Grid`, `Row`)을 우선적으로 사용한다.
+- 가능한 경우 Carbon의 공식 접근성(A11y) 가이드를 준수하는 코드를 생성한다.
+
+---
+
 ## 공통 개발 유의사항
 
 - 모든 텍스트는 제공된 스크립트의 핵심 메시지를 요약하여 슬라이드에 가독성 있게 배치할 것.

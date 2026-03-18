@@ -1,7 +1,0 @@
-export { default as Slide0Intro } from './Slide0Intro'
-export { default as Slide1Market } from './Slide1Market'
-export { default as Slide2Middleware } from './Slide2Middleware'
-export { default as Slide3Tracking } from './Slide3Tracking'
-export { default as Slide4AdReview } from './Slide4AdReview'
-export { default as Slide5PatientMsg } from './Slide5PatientMsg'
-export { default as Slide6Outro } from './Slide6Outro'
