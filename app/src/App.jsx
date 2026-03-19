@@ -8,7 +8,6 @@ import Slide02b_AdChannels from './components/slides/Slide02b_AdChannels'
 import Slide03_MarketSize from './components/slides/Slide03_MarketSize'
 import Slide04_AdPainPoint from './components/slides/Slide04_AdPainPoint'
 import Slide05_DataSilo from './components/slides/Slide05_DataSilo'
-import Slide05b_FragmentedBooking from './components/slides/Slide05b_FragmentedBooking'
 import Slide06_DoctalkIntro from './components/slides/Slide06_DoctalkIntro'
 import Slide07_PlatformExpansion from './components/slides/Slide07_PlatformExpansion'
 import Slide08_EmrIntegration from './components/slides/Slide08_EmrIntegration'
@@ -29,12 +28,12 @@ import Slide17_OutroVision from './components/slides/Slide17_OutroVision'
 
 function App() {
   const containerRef = useRef(null)
-  const { activeSlide, scrollToSlide } = useScrollSnap(containerRef, 24)
+  const { activeSlide, scrollToSlide } = useScrollSnap(containerRef, 23)
 
   return (
     <div ref={containerRef} className="slide-container">
       <ScrollIndicator
-        totalSlides={24}
+        totalSlides={23}
         activeSlide={activeSlide}
         onDotClick={scrollToSlide}
       />
@@ -44,11 +43,10 @@ function App() {
       <Slide03_MarketSize />
       <Slide04_AdPainPoint />
       <Slide05_DataSilo />
-      <Slide05b_FragmentedBooking />
       <Slide06_DoctalkIntro />
       <Slide07_PlatformExpansion />
-      <Slide08_EmrIntegration />
       <Slide08b_UnifiedManagement />
+      <Slide08_EmrIntegration />
       <Slide09_DoctalkResults />
       <Slide10_TrackingOverview />
       <Slide11_EmrTracking />

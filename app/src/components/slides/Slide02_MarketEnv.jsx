@@ -1,104 +1,123 @@
 import { useRef } from 'react'
-import { Hospital, Catalog, Store } from '@carbon/icons-react'
 import SlideLayout from '../common/SlideLayout'
 import useSlideAnimation from '../../hooks/useSlideAnimation'
 
-const channels = [
-  { label: '버스 배너', icon: Store },
-  { label: '엘리베이터 광고', icon: Catalog },
-  { label: '네이버 키워드', icon: Catalog },
-  { label: '인스타그램 숏폼', icon: Catalog },
-  { label: '유튜브 광고', icon: Catalog },
-  { label: '카카오 플러스친구', icon: Catalog },
-  { label: '블로그 체험단', icon: Catalog },
-  { label: '지역 전단지', icon: Store },
-  { label: 'TV / 라디오', icon: Catalog },
-  { label: '옥외 전광판', icon: Store },
-  { label: '병원 포털 광고', icon: Hospital },
-  { label: '리뷰 마케팅', icon: Catalog },
+const DATA_CIRCLES = [
+  {
+    num: '01',
+    value: '51.4%',
+    label: '수도권·대도시 집중',
+    desc: '전체 의료기관의 절반 이상이\n수도권 및 대도시권에 밀집',
+    filled: true,
+  },
+  {
+    num: '02',
+    value: '상위 1%',
+    label: 'OECD 의료 밀도',
+    desc: '면적 당 의료기관 수 기준\nOECD 국가 중 상위 1% 수준',
+    filled: false,
+  },
+  {
+    num: '03',
+    value: '12.8개',
+    label: '인구 1,000명당 병상',
+    desc: 'OECD 평균의 약 2.7배\n병상 수 압도적 1위',
+    filled: false,
+  },
 ]
 
 export default function Slide02_MarketEnv() {
   const ref = useRef(null)
 
-  useSlideAnimation(ref, (gsap, ScrollTrigger) => {
-    gsap.from('.s02-header', {
-      opacity: 0,
-      y: 30,
-      duration: 0.6,
-      scrollTrigger: {
-        trigger: ref.current,
-        start: 'top 80%',
-      },
+  useSlideAnimation(ref, (gsap) => {
+    const tl = gsap.timeline({
+      scrollTrigger: { trigger: ref.current, start: 'top 80%' },
     })
 
-    gsap.from('.s02-card', {
-      opacity: 0,
-      y: 40,
-      scale: 0.95,
-      duration: 0.5,
-      stagger: 0.07,
-      ease: 'power2.out',
-      scrollTrigger: {
-        trigger: ref.current,
-        start: 'top 80%',
-      },
-    })
+    tl.from('.s02-header', { opacity: 0, y: 30, duration: 0.6 })
+      .from('.s02-circle', {
+        opacity: 0, scale: 0.8,
+        stagger: 0.15, duration: 0.7, ease: 'back.out(1.4)',
+      }, '-=0.3')
+      .from('.s02-ring', {
+        strokeDashoffset: 565,
+        duration: 1.2, stagger: 0.2, ease: 'power2.out',
+      }, '-=0.8')
+      .from('.s02-bottom', { opacity: 0, y: 20, duration: 0.5 }, '-=0.3')
   })
 
   return (
     <SlideLayout id="slide-02" ref={ref}>
-      <div className="s02-header">
+      <div className="s02-header" style={{ marginBottom: '2rem' }}>
         <p className="section-label">MARKET OVERVIEW</p>
-        <h2 className="section-title">세계 최고 밀도의 의료 시장</h2>
-        <p className="section-subtitle">
-          버스 배너부터 엘리베이터 광고, 네이버 키워드, 인스타그램 숏폼까지.
+        <h2 className="section-title">
+          우리나라 의료 시장은 전 세계에서
           <br />
-          병원이 관리해야 할 마케팅 채널은 끝없이 늘어나고 있습니다.
-        </p>
+          가장 밀도가 높고 치열한 환경 중 하나입니다
+        </h2>
       </div>
 
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(4, 1fr)',
-          gap: '1rem',
-        }}
-      >
-        {channels.map(({ label, icon: Icon }, i) => (
-          <div
-            key={label}
-            className="s02-card"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.75rem',
-              padding: '1rem 1.25rem',
-              background: '#f8fafc',
-              borderRadius: '0.75rem',
-              border: '1px solid #e2e8f0',
-              fontWeight: 600,
-              fontSize: '0.875rem',
-              transition: 'all 0.3s ease',
-            }}
-          >
-            <Icon size={20} style={{ color: 'var(--color-primary)', flexShrink: 0 }} />
-            <span>{label}</span>
+      {/* Circle data points */}
+      <div style={{
+        display: 'flex', justifyContent: 'center', gap: '3.5rem',
+        marginTop: '5rem',
+      }}>
+        {DATA_CIRCLES.map((item, i) => (
+          <div key={item.num} className="s02-circle" style={{
+            display: 'flex', flexDirection: 'column', alignItems: 'center',
+            textAlign: 'center', width: '220px',
+          }}>
+            {/* Circle */}
+            <div style={{
+              position: 'relative', width: '160px', height: '160px',
+              marginBottom: '1.25rem',
+            }}>
+              {/* SVG ring */}
+              <svg viewBox="0 0 180 180" style={{
+                position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+                transform: 'rotate(-90deg)',
+              }}>
+                <circle
+                  cx="90" cy="90" r="85"
+                  fill={item.filled ? 'var(--color-primary)' : 'none'}
+                  fillOpacity={item.filled ? 0.12 : 0}
+                  stroke="var(--color-primary)"
+                  strokeWidth={item.filled ? 3 : 2}
+                  strokeDasharray="565"
+                  strokeDashoffset="0"
+                  strokeLinecap="round"
+                  className="s02-ring"
+                  opacity={item.filled ? 1 : 0.5}
+                />
+              </svg>
+
+              {/* Inner content */}
+              <div style={{
+                position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+                display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <p style={{
+                  fontSize: '0.875rem', fontWeight: 800, color: 'var(--color-primary)',
+                  marginBottom: '0.25rem',
+                }}>{item.num}</p>
+                <p style={{
+                  fontSize: '2rem', fontWeight: 900, color: '#0f172a',
+                  lineHeight: 1, letterSpacing: '-0.02em',
+                }}>{item.value}</p>
+              </div>
+            </div>
+
+            {/* Label */}
+            <p style={{ fontWeight: 700, fontSize: '0.9375rem', color: '#0f172a', marginBottom: '0.375rem' }}>
+              {item.label}
+            </p>
+            <p style={{ fontSize: '0.75rem', color: '#94a3b8', lineHeight: 1.5, whiteSpace: 'pre-line' }}>
+              {item.desc}
+            </p>
           </div>
         ))}
       </div>
 
-      <p
-        className="s02-card"
-        style={{
-          marginTop: '2rem',
-          fontSize: '0.9375rem',
-          color: '#64748b',
-          textAlign: 'center',
-        }}
-      >
-        병원 한 곳이 관리해야 할 채널만 <strong style={{ color: 'var(--color-primary)' }}>10개 이상</strong> -- 그리고 계속 늘어나는 중
-      </p>
     </SlideLayout>
   )
 }

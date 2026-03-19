@@ -1,20 +1,20 @@
 import { useRef } from 'react'
-import { Store, Screen, Van, Globe, Search, Chat, FaceActivated } from '@carbon/icons-react'
 import SlideLayout from '../common/SlideLayout'
 import useSlideAnimation from '../../hooks/useSlideAnimation'
 
 const OFFLINE = [
-  { icon: Van, label: '버스 광고', desc: '노선별 배너, 외부 래핑' },
-  { icon: Store, label: '우편 배달 전단지', desc: '지역 타겟 DM 발송' },
-  { icon: Screen, label: '아파트 엘리베이터 광고', desc: '디스플레이 영상 광고' },
+  { label: '버스 광고', desc: '노선별 외부 래핑·배너', emoji: '🚌' },
+  { label: '택배차 광고', desc: '택배 차량 외부 래핑 광고', emoji: '🚚' },
+  { label: '엘리베이터 디스플레이', desc: '아파트·빌딩 영상 광고', emoji: '🖥️' },
 ]
 
 const ONLINE = [
-  { icon: Search, label: '네이버', desc: '검색광고, 플레이스, 블로그' },
-  { icon: Store, label: '당근', desc: '동네 병원 광고' },
-  { icon: Chat, label: '카카오', desc: '채널, 비즈보드 광고' },
-  { icon: FaceActivated, label: '강남언니', desc: '시술/미용 전문 플랫폼' },
-  { icon: Globe, label: '구글', desc: '검색광고, GDN 디스플레이' },
+  { logo: '/images/logos/네이버 로고.png', label: '네이버', desc: '검색광고, 플레이스, 블로그' },
+  { logo: '/images/logos/카카오 로고.png', label: '카카오', desc: '채널, 비즈보드 광고' },
+  { logo: '/images/logos/당근 로고.png', label: '당근', desc: '동네 병원 광고' },
+  { logo: '/images/logos/강남언니 로고.png', label: '강남언니', desc: '시술/미용 전문 플랫폼' },
+  { logo: '/images/logos/인스타그램 로고.png', label: '인스타그램', desc: '피드·릴스·숏폼 광고' },
+  { logo: '/images/logos/유튜브 로고.png', label: '유튜브', desc: '영상·숏츠 광고' },
 ]
 
 export default function Slide02b_AdChannels() {
@@ -34,15 +34,15 @@ export default function Slide02b_AdChannels() {
     <SlideLayout id="slide-02b" ref={ref}>
       <div className="s02b-header">
         <p className="section-label">AD CHANNELS</p>
-        <h2 className="section-title">병원이 활용하는 광고 채널</h2>
+        <h2 className="section-title">병원 광고 채널 운영의 복잡도 증가</h2>
         <p className="section-subtitle">
-          오프라인부터 온라인까지, 병원 마케팅의 현재 모습
+          오프라인부터 온라인까지, 병원 광고의 현재 모습
         </p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.4fr', gap: '3rem', alignItems: 'start' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.6fr', gap: '3rem', alignItems: 'stretch' }}>
         {/* Offline */}
-        <div>
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
           <p className="s02b-group-label" style={{
             fontSize: '0.8125rem', fontWeight: 700, letterSpacing: '0.1em',
             color: '#94a3b8', textTransform: 'uppercase', marginBottom: '1rem',
@@ -50,21 +50,20 @@ export default function Slide02b_AdChannels() {
           }}>
             Offline
           </p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-            {OFFLINE.map(({ icon: Icon, label, desc }) => (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', flex: 1 }}>
+            {OFFLINE.map(({ label, desc, emoji }) => (
               <div key={label} className="s02b-card" style={{
                 display: 'flex', alignItems: 'center', gap: '1rem',
-                padding: '1.25rem 1.5rem',
+                padding: '1.25rem 1.5rem', flex: 1,
                 background: '#f8fafc', borderRadius: '1rem',
                 border: '1px solid #e2e8f0',
-                transition: 'all 0.3s ease',
               }}>
                 <div style={{
-                  width: '3rem', height: '3rem', borderRadius: '0.75rem',
+                  width: '3.5rem', height: '3.5rem', borderRadius: '0.75rem',
                   background: '#e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  flexShrink: 0,
+                  flexShrink: 0, fontSize: '1.5rem',
                 }}>
-                  <Icon size={22} style={{ color: '#475569' }} />
+                  {emoji}
                 </div>
                 <div>
                   <p style={{ fontWeight: 700, fontSize: '0.9375rem', color: '#1e293b' }}>{label}</p>
@@ -76,7 +75,7 @@ export default function Slide02b_AdChannels() {
         </div>
 
         {/* Online */}
-        <div>
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
           <p className="s02b-group-label" style={{
             fontSize: '0.8125rem', fontWeight: 700, letterSpacing: '0.1em',
             color: 'var(--color-primary)', textTransform: 'uppercase', marginBottom: '1rem',
@@ -84,25 +83,26 @@ export default function Slide02b_AdChannels() {
           }}>
             Online
           </p>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
-            {ONLINE.map(({ icon: Icon, label, desc }) => (
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gridTemplateRows: '1fr 1fr', gap: '0.75rem', flex: 1 }}>
+            {ONLINE.map(({ logo, icon: Icon, label, desc }) => (
               <div key={label} className="s02b-card" style={{
-                display: 'flex', alignItems: 'center', gap: '1rem',
-                padding: '1.25rem 1.5rem',
-                background: 'var(--color-primary-light)', borderRadius: '1rem',
-                border: '1px solid rgba(47, 208, 150, 0.15)',
-                transition: 'all 0.3s ease',
+                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.625rem',
+                padding: '1.25rem 1rem',
+                background: '#f8fafc', borderRadius: '1rem',
+                border: '1px solid #e2e8f0',
+                textAlign: 'center',
               }}>
                 <div style={{
-                  width: '3rem', height: '3rem', borderRadius: '0.75rem',
-                  background: 'var(--color-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  flexShrink: 0,
+                  width: '4.5rem', height: '4.5rem', borderRadius: '50%',
+                  background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  flexShrink: 0, overflow: 'hidden',
+                  border: '1px solid #e2e8f0',
                 }}>
-                  <Icon size={22} style={{ color: '#ffffff' }} />
+                  <img src={logo} alt={label} style={{ width: '3rem', height: '3rem', objectFit: 'contain' }} />
                 </div>
                 <div>
                   <p style={{ fontWeight: 700, fontSize: '0.9375rem', color: '#1e293b' }}>{label}</p>
-                  <p style={{ fontSize: '0.75rem', color: '#64748b' }}>{desc}</p>
+                  <p style={{ fontSize: '0.6875rem', color: '#94a3b8' }}>{desc}</p>
                 </div>
               </div>
             ))}

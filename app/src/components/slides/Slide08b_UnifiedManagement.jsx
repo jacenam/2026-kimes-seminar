@@ -1,16 +1,23 @@
 import { useRef } from 'react'
-import { ConnectionSignal, ArrowRight, Devices, Hospital, Globe, Search, Chat, Store, FaceActivated } from '@carbon/icons-react'
 import SlideLayout from '../common/SlideLayout'
 import useSlideAnimation from '../../hooks/useSlideAnimation'
 
-const PLATFORMS = [
-  { icon: Search, label: '네이버' },
-  { icon: Chat, label: '카카오' },
-  { icon: Store, label: '당근' },
-  { icon: FaceActivated, label: '강남언니' },
-  { icon: Globe, label: '구글' },
-  { icon: Devices, label: '블라인드' },
-  { icon: Devices, label: '키즈노트' },
+const UI_SCREENS = [
+  {
+    src: '/images/doctalk-reservation-status.png',
+    label: '예약현황',
+    desc: '네이버·카카오·당근 예약을 한 화면에서 확인·관리',
+  },
+  {
+    src: '/images/doctalk-reservation-products.png',
+    label: '예약상품',
+    desc: '시술별 예약 상품을 등록하고 노출 여부를 제어',
+  },
+  {
+    src: '/images/doctalk-sameday-reservation.png',
+    label: '당일예약',
+    desc: '플랫폼별 당일예약 수신 설정을 한 곳에서 관리',
+  },
 ]
 
 export default function Slide08b_UnifiedManagement() {
@@ -22,16 +29,13 @@ export default function Slide08b_UnifiedManagement() {
     })
 
     tl.from('.s08b-header', { opacity: 0, y: 30, duration: 0.6 })
-      .from('.s08b-platform', { opacity: 0, x: -20, scale: 0.9, stagger: 0.06, duration: 0.5, ease: 'back.out(1.4)' }, '-=0.2')
-      .from('.s08b-arrow', { opacity: 0, scaleX: 0, duration: 0.6, stagger: 0.08 }, '-=0.4')
-      .from('.s08b-hub', { opacity: 0, scale: 0, duration: 0.8, ease: 'back.out(1.7)' }, '-=0.3')
-      .from('.s08b-emr', { opacity: 0, x: 20, duration: 0.6 }, '-=0.4')
-      .from('.s08b-bottom', { opacity: 0, y: 20, duration: 0.5 }, '-=0.2')
+      .from('.s08b-card', { opacity: 0, y: 40, stagger: 0.15, duration: 0.7, ease: 'power2.out' }, '-=0.2')
+      .from('.s08b-hero', { opacity: 0, y: 30, duration: 0.8, ease: 'power2.out' }, '-=0.2')
   })
 
   return (
     <SlideLayout id="slide-08b" ref={ref}>
-      <div className="s08b-header" style={{ textAlign: 'center', marginBottom: '3rem' }}>
+      <div className="s08b-header" style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
         <p className="section-label">UNIFIED MANAGEMENT</p>
         <h2 className="section-title">채널은 넓어지고, 관리는 하나로</h2>
         <p className="section-subtitle">
@@ -39,87 +43,74 @@ export default function Slide08b_UnifiedManagement() {
         </p>
       </div>
 
-      {/* Infographic: Many platforms → Doctalk → EMR */}
+      {/* UI Screenshots Grid */}
       <div style={{
-        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '2rem',
+        display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem',
+        marginBottom: '2rem',
       }}>
-        {/* Left: Multiple platforms fanning out */}
-        <div style={{
-          display: 'flex', flexDirection: 'column', gap: '0.5rem',
-          alignItems: 'flex-end',
-        }}>
-          {PLATFORMS.map(({ icon: Icon, label }) => (
-            <div key={label} className="s08b-platform" style={{
-              display: 'flex', alignItems: 'center', gap: '0.625rem',
-              padding: '0.625rem 1.25rem',
-              background: '#f8fafc', borderRadius: '0.75rem',
-              border: '1px solid #e2e8f0', fontSize: '0.8125rem', fontWeight: 600,
-            }}>
-              <Icon size={18} style={{ color: 'var(--color-primary)' }} />
-              <span>{label}</span>
-            </div>
-          ))}
-        </div>
-
-        {/* Arrows converging */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.25rem' }}>
-          {[...Array(7)].map((_, i) => (
-            <div key={i} className="s08b-arrow" style={{
-              width: '60px', height: '2px',
-              background: 'linear-gradient(90deg, #e2e8f0, var(--color-primary))',
-              borderRadius: '1px',
-            }} />
-          ))}
-        </div>
-
-        {/* Center hub: Doctalk */}
-        <div className="s08b-hub" style={{
-          width: '160px', height: '160px', borderRadius: '50%',
-          background: 'var(--color-primary)',
-          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-          color: 'white', textAlign: 'center', flexShrink: 0,
-          boxShadow: '0 20px 60px rgba(47, 208, 150, 0.3)',
-        }}>
-          <ConnectionSignal size={32} style={{ marginBottom: '0.25rem' }} />
-          <p style={{ fontWeight: 800, fontSize: '0.9375rem' }}>닥톡예약</p>
-          <p style={{ fontSize: '0.625rem', opacity: 0.8 }}>단일 관리 포인트</p>
-        </div>
-
-        {/* Arrow to EMR */}
-        <div className="s08b-arrow" style={{
-          width: '60px', height: '2px',
-          background: 'linear-gradient(90deg, var(--color-primary), #e2e8f0)',
-          borderRadius: '1px',
-        }} />
-
-        {/* Right: EMR */}
-        <div className="s08b-emr" style={{
-          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem',
-        }}>
-          <div style={{
-            width: '100px', height: '100px', borderRadius: '1.25rem',
-            background: '#f8fafc', border: '2px solid #e2e8f0',
-            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+        {UI_SCREENS.map(({ src, label, desc }) => (
+          <div key={label} className="s08b-card" style={{
+            borderRadius: '1rem', overflow: 'hidden',
+            border: '1px solid #e2e8f0',
+            background: 'white',
+            boxShadow: '0 4px 24px rgba(0,0,0,0.06)',
           }}>
-            <Hospital size={28} style={{ color: '#475569' }} />
-            <p style={{ fontSize: '0.6875rem', fontWeight: 700, color: '#475569', marginTop: '0.25rem' }}>EMR</p>
+            {/* Screenshot */}
+            <div style={{
+              position: 'relative', overflow: 'hidden',
+              background: '#f8fafc',
+              borderBottom: '1px solid #e2e8f0',
+              height: '200px',
+            }}>
+              <img
+                src={src}
+                alt={label}
+                style={{
+                  width: '100%', height: '100%', display: 'block',
+                  objectFit: 'cover', objectPosition: 'top left',
+                }}
+              />
+            </div>
+
+            {/* Label area */}
+            <div style={{ padding: '1.25rem 1.5rem' }}>
+              <p style={{
+                fontWeight: 800, fontSize: '1.0625rem', color: '#0f172a',
+                marginBottom: '0.375rem',
+                display: 'flex', alignItems: 'center', gap: '0.5rem',
+              }}>
+                <span style={{
+                  display: 'inline-block', width: '6px', height: '6px',
+                  borderRadius: '50%', background: 'var(--color-primary)', flexShrink: 0,
+                }} />
+                {label}
+              </p>
+              <p style={{ fontSize: '0.8125rem', color: '#64748b', lineHeight: 1.6 }}>
+                {desc}
+              </p>
+            </div>
           </div>
-          <p style={{ fontSize: '0.6875rem', color: '#94a3b8', fontWeight: 600 }}>32개 전자차트 연동</p>
-        </div>
+        ))}
       </div>
 
-      {/* Bottom callout */}
-      <div className="s08b-bottom" style={{
-        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem',
-        marginTop: '2.5rem', padding: '1.25rem 2rem',
-        background: 'var(--color-primary-light)', borderRadius: '1rem',
-        border: '1px solid rgba(47, 208, 150, 0.2)',
+      {/* Hero: Slot Sync */}
+      <div className="s08b-hero" style={{
+        borderRadius: '1rem', overflow: 'hidden',
+        border: '2px solid var(--color-primary)',
+        background: 'white',
+        boxShadow: '0 8px 32px rgba(47, 208, 150, 0.15)',
+        marginBottom: '2rem',
       }}>
-        <ConnectionSignal size={22} style={{ color: 'var(--color-primary)', flexShrink: 0 }} />
-        <p style={{ fontSize: '0.9375rem', fontWeight: 600, color: '#1e293b' }}>
-          예약 설정 한 번이면 모든 플랫폼에 실시간 반영 — 유입은 넓히고, 관리는 줄이고
-        </p>
+        <img
+          src="/images/doctalk-slot-sync.png"
+          alt="예약 가능 인원 수(슬롯) 동기화"
+          style={{
+            width: '100%', height: 'auto', display: 'block',
+          }}
+        />
       </div>
+
+
     </SlideLayout>
   )
 }
