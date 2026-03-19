@@ -1,114 +1,119 @@
 import { useRef } from 'react'
-import { ConnectionSignal, DataConnected } from '@carbon/icons-react'
 import SlideLayout from '../common/SlideLayout'
 import useSlideAnimation from '../../hooks/useSlideAnimation'
 
-const platformList = [
-  '네이버',
-  '카카오',
-  '당근',
-  '강남언니',
-  '구글',
-  '블라인드',
-  '키즈노트',
+const BASE = import.meta.env.BASE_URL
+
+const ROW1 = [
+  `${BASE}images/logos/emr/비트컴퓨터 로고.png`,
+  `${BASE}images/logos/emr/이지스헬스케어 로고.png`,
+  `${BASE}images/logos/emr/동의보감 로고.png`,
+  `${BASE}images/logos/emr/전능IT 로고.png`,
+  `${BASE}images/logos/emr/네오소프트뱅크 로고.png`,
+  `${BASE}images/logos/emr/다솜메디케어 로고.png`,
+  `${BASE}images/logos/emr/아비쥬의원 로고.png`,
+  `${BASE}images/logos/emr/자생한방병원 로고.png`,
+  `${BASE}images/logos/emr/함소아한의원 로고.png`,
+  `${BASE}images/logos/emr/와이소프트 로고.png`,
 ]
 
-const emrList = [
-  '비트컴퓨터',
-  '이지스헬스케어',
-  '동의보감',
-  '한의맥',
-  '전능IT',
-  '네오소프트뱅크',
-  '다솜메디케어',
-  '아비쥬의원',
-  '자생한방병원',
-  '함소아한의원',
+const ROW2 = [
+  `${BASE}images/logos/emr/HD정션 로고.png`,
+  `${BASE}images/logos/emr/MD마케팅 로고.png`,
+  `${BASE}images/logos/emr/MD소프트 로고.png`,
+  `${BASE}images/logos/emr/메센츠 로고.png`,
+  `${BASE}images/logos/emr/메이드유 로고.png`,
+  `${BASE}images/logos/emr/모션랩스 로고.png`,
+  `${BASE}images/logos/emr/뷰티라운지 로고.png`,
+  `${BASE}images/logos/emr/아프닥 로고.png`,
+  `${BASE}images/logos/emr/웨이브코드 로고.svg.png`,
+  `${BASE}images/logos/emr/트라이업 로고.png`,
 ]
+
+function MarqueeRow({ logos, direction = 'left', duration = 30 }) {
+  // Duplicate logos enough times to fill the gap during scroll
+  const items = [...logos, ...logos, ...logos]
+  const animName = direction === 'left' ? 'marqueeLeft' : 'marqueeRight'
+
+  return (
+    <div style={{
+      overflow: 'hidden',
+      maskImage: 'linear-gradient(90deg, transparent, black 8%, black 92%, transparent)',
+      WebkitMaskImage: 'linear-gradient(90deg, transparent, black 8%, black 92%, transparent)',
+    }}>
+      <div style={{
+        display: 'flex', alignItems: 'center', gap: '3rem',
+        width: 'max-content',
+        animation: `${animName} ${duration}s linear infinite`,
+      }}>
+        {items.map((logo, i) => (
+          <div key={i} style={{
+            flexShrink: 0,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            height: '5.5rem', width: '10rem',
+            padding: '0.5rem',
+          }}>
+            <img src={logo} alt="" style={{
+              maxWidth: '100%', maxHeight: '100%', objectFit: 'contain',
+            }} />
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
 
 export default function Slide08_EmrIntegration() {
   const ref = useRef(null)
 
-  useSlideAnimation(ref, (gsap, ScrollTrigger) => {
+  useSlideAnimation(ref, (gsap) => {
     const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: ref.current,
-        start: 'top 80%',
-      },
+      scrollTrigger: { trigger: ref.current, start: 'top 80%' },
     })
 
-    tl.from('.s08-label', { opacity: 0, y: 30, duration: 0.5 })
-      .from('.s08-title', { opacity: 0, y: 30, duration: 0.6 }, '-=0.2')
-      .from('.s08-subtitle', { opacity: 0, y: 20, duration: 0.5 }, '-=0.2')
-      .from('.s08-center', { opacity: 0, scale: 0.3, duration: 0.7, ease: 'back.out(1.7)' }, '-=0.1')
-      .from('.s08-platform', { opacity: 0, x: -40, stagger: 0.06, duration: 0.4 }, '-=0.3')
-      .from('.s08-emr', { opacity: 0, x: 40, stagger: 0.06, duration: 0.4 }, '-=0.5')
-      .from('.s08-message', { opacity: 0, y: 20, duration: 0.5 }, '-=0.1')
+    tl.from('.s08-header', { opacity: 0, y: 30, duration: 0.6 })
+      .from('.s08-marquee-row', { opacity: 0, y: 20, stagger: 0.15, duration: 0.6 }, '-=0.2')
   })
 
   return (
     <SlideLayout id="slide-08" ref={ref}>
-      <div style={{ position: 'relative', zIndex: 1 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
-          <ConnectionSignal size={20} style={{ color: 'var(--color-primary)' }} />
-          <p className="section-label s08-label" style={{ marginBottom: 0 }}>EMR NETWORK</p>
+      {/* Keyframes */}
+      <style>{`
+        @keyframes marqueeLeft {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(calc(-100% / 3)); }
+        }
+        @keyframes marqueeRight {
+          0% { transform: translateX(calc(-100% / 3)); }
+          100% { transform: translateX(0); }
+        }
+      `}</style>
+
+      {/* Header */}
+      <div className="s08-header" style={{ textAlign: 'center', marginBottom: '3rem' }}>
+        <p className="section-label">EMR NETWORK</p>
+        <h2 className="section-title">
+          데이터 연결의 확장: 32개 전자차트사 연동
+        </h2>
+        <p style={{
+          fontSize: '1.125rem', fontWeight: 500, color: '#64748b', lineHeight: 1.7,
+          maxWidth: '680px', margin: '0 auto',
+        }}>
+          더 많은 1·2차 의료기관이 플랫폼 연동을 통한 환자 유입 증대를 경험할 수 있도록,<br />
+          EMR 파트너사 연동을 지속적으로 확대하고 있습니다
+        </p>
+      </div>
+
+      {/* Marquee rows */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '3rem' }}>
+        <div className="s08-marquee-row">
+          <MarqueeRow logos={ROW1} direction="left" duration={28} />
         </div>
-
-        <h2 className="section-title s08-title">32개 전자차트사 연동</h2>
-        <p className="section-subtitle s08-subtitle">한 번의 설정으로 모든 플랫폼에 실시간 반영</p>
-
-        <div className="hub-spoke">
-          {/* Left: Platforms */}
-          <div className="hub-spoke__side">
-            <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#94a3b8', letterSpacing: '0.1em', marginBottom: '0.25rem' }}>
-              PLATFORMS
-            </p>
-            {platformList.map((name) => (
-              <div key={name} className="hub-spoke__item s08-platform">
-                <DataConnected size={16} style={{ color: 'var(--color-primary)' }} />
-                <span>{name}</span>
-              </div>
-            ))}
-          </div>
-
-          {/* Center: Hub */}
-          <div className="hub-spoke__center s08-center">
-            닥톡예약
-          </div>
-
-          {/* Right: EMR partners */}
-          <div className="hub-spoke__side">
-            <p style={{ fontSize: '0.75rem', fontWeight: 700, color: '#94a3b8', letterSpacing: '0.1em', marginBottom: '0.25rem' }}>
-              EMR PARTNERS
-            </p>
-            {emrList.map((name) => (
-              <div key={name} className="hub-spoke__item s08-emr">
-                <ConnectionSignal size={16} style={{ color: '#64748b' }} />
-                <span>{name}</span>
-              </div>
-            ))}
-            <div className="hub-spoke__item s08-emr" style={{ justifyContent: 'center', color: 'var(--color-primary)', fontWeight: 700 }}>
-              + 25 more
-            </div>
-          </div>
-        </div>
-
-        <div
-          className="s08-message"
-          style={{
-            textAlign: 'center',
-            marginTop: '2rem',
-            padding: '1rem 2rem',
-            background: '#f8fafc',
-            borderRadius: '0.75rem',
-            border: '1px solid #e2e8f0',
-          }}
-        >
-          <p style={{ fontSize: '1rem', fontWeight: 600, color: '#334155' }}>
-            환자 유입 지점은 늘어나고, 관리 포인트는 <span style={{ color: 'var(--color-primary)' }}>한 곳</span>으로
-          </p>
+        <div className="s08-marquee-row">
+          <MarqueeRow logos={ROW2} direction="right" duration={32} />
         </div>
       </div>
+
     </SlideLayout>
   )
 }

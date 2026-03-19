@@ -1,94 +1,177 @@
 import { useRef } from 'react'
-import { Growth, Hospital, Partnership } from '@carbon/icons-react'
 import SlideLayout from '../common/SlideLayout'
 import useSlideAnimation from '../../hooks/useSlideAnimation'
-
-const stats = [
-  { value: '25,000+', label: 'EMR 고객사 네트워크', icon: Partnership },
-  { value: '4,500+', label: '닥톡예약 사용 병·의원', icon: Hospital },
-  { value: '32개', label: '연동 전자차트사', icon: Growth },
-]
 
 export default function Slide09_DoctalkResults() {
   const ref = useRef(null)
 
-  useSlideAnimation(ref, (gsap, ScrollTrigger) => {
+  useSlideAnimation(ref, (gsap) => {
     const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: ref.current,
-        start: 'top 80%',
-      },
+      scrollTrigger: { trigger: ref.current, start: 'top 80%' },
     })
 
-    tl.from('.s09-label', { opacity: 0, y: 30, duration: 0.5 })
-      .from('.s09-title', { opacity: 0, y: 30, duration: 0.6 }, '-=0.2')
+    tl.from('.s09-header', { opacity: 0, y: 30, duration: 0.6 })
+      .from('.s09-cell', { opacity: 0, y: 20, stagger: 0.06, duration: 0.5, ease: 'power2.out' }, '-=0.2')
 
-    // Count-up animation for stat numbers
-    const numberEls = ref.current.querySelectorAll('.s09-number')
-    const targets = [25000, 4500, 32]
-    const suffixes = ['+', '+', '개']
-
-    numberEls.forEach((el, i) => {
+    // Count-up animations
+    const counters = ref.current.querySelectorAll('[data-target]')
+    counters.forEach((el) => {
+      const target = parseFloat(el.dataset.target)
+      const suffix = el.dataset.suffix || ''
       const obj = { val: 0 }
-      tl.from(el.closest('.stat-card'), { opacity: 0, y: 40, duration: 0.5 }, i === 0 ? '-=0.1' : '-=0.3')
       tl.to(obj, {
-        val: targets[i],
-        duration: 1.2,
+        val: target,
+        duration: 1.4,
         ease: 'power1.out',
         onUpdate() {
-          const formatted = Math.round(obj.val).toLocaleString()
-          el.textContent = formatted + suffixes[i]
+          const v = Math.round(obj.val)
+          el.textContent = v.toLocaleString() + suffix
         },
-      }, '<')
+      }, '-=1.2')
     })
-
-    tl.from('.s09-banner', { opacity: 0, y: 60, duration: 0.7, ease: 'power2.out' }, '-=0.3')
   })
+
+  const cellBase = {
+    background: '#f4f5f6',
+    borderRadius: '1rem',
+    padding: '1.75rem 2rem',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    minHeight: 0,
+  }
+
+  const labelStyle = {
+    fontSize: '0.8125rem',
+    fontWeight: 600,
+    color: '#6b7280',
+    lineHeight: 1.4,
+    marginBottom: '0.75rem',
+  }
+
+  const numberStyle = {
+    fontSize: '3.5rem',
+    fontWeight: 800,
+    color: '#0f172a',
+    letterSpacing: '-0.04em',
+    lineHeight: 1,
+  }
 
   return (
     <SlideLayout id="slide-09" ref={ref}>
-      <div style={{ position: 'relative', zIndex: 1 }}>
-        <p className="section-label s09-label">RESULTS</p>
-        <h2 className="section-title s09-title" style={{ marginBottom: '2.5rem' }}>닥톡예약의 성과</h2>
+      <div className="s09-header" style={{ marginBottom: '2rem' }}>
+        <p className="section-label">RESULTS</p>
+        <h2 className="section-title">닥톡예약의 성과</h2>
+      </div>
 
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: '1.5rem',
-          marginBottom: '2.5rem',
+      {/* Bento Grid */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(4, 1fr)',
+        gridTemplateRows: 'auto auto',
+        gap: '0.875rem',
+      }}>
+        {/* Row 1 */}
+
+        {/* EMR 고객사 — spans 2 cols */}
+        <div className="s09-cell" style={{
+          ...cellBase, gridColumn: 'span 2',
         }}>
-          {stats.map((s) => {
-            const Icon = s.icon
-            return (
-              <div key={s.label} className="stat-card" style={{ padding: '2.5rem 2rem' }}>
-                <Icon size={28} style={{ color: 'var(--color-primary)', marginBottom: '1rem' }} />
-                <p className="stat-card__number s09-number" style={{ color: 'var(--color-primary)' }}>
-                  {s.value}
-                </p>
-                <p className="stat-card__label">{s.label}</p>
-              </div>
-            )
-          })}
+          <p style={labelStyle}>EMR 고객사 네트워크</p>
+          <p data-target="25000" data-suffix="+" style={numberStyle}>
+            25,000+
+          </p>
         </div>
 
-        <div
-          className="s09-banner"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '1rem',
-            padding: '1.5rem 2rem',
-            background: 'var(--color-primary)',
-            borderRadius: '1rem',
-            color: '#ffffff',
-          }}
-        >
-          <Growth size={28} />
-          <p style={{ fontSize: '1.25rem', fontWeight: 700 }}>
-            신규 환자 유입 월 평균 <span style={{ fontSize: '1.5rem' }}>14%</span> 성장
+        {/* 사용 병·의원 */}
+        <div className="s09-cell" style={cellBase}>
+          <p style={labelStyle}>닥톡예약 사용<br />병·의원</p>
+          <p data-target="4500" data-suffix="+" style={{
+            ...numberStyle, fontSize: '3rem',
+          }}>
+            4,500+
           </p>
-          <span style={{ fontSize: '1.5rem' }}>↑</span>
+        </div>
+
+        {/* 연동 전자차트사 — accent */}
+        <div className="s09-cell" style={{
+          ...cellBase,
+          background: 'var(--color-primary)',
+          color: 'white',
+        }}>
+          <p style={{ ...labelStyle, color: 'rgba(255,255,255,0.7)' }}>
+            연동 전자차트사
+          </p>
+          <p data-target="32" data-suffix="개" style={{
+            ...numberStyle, fontSize: '3rem', color: 'white',
+          }}>
+            32개
+          </p>
+        </div>
+
+        {/* Row 2 */}
+
+        {/* 월 평균 성장률 */}
+        <div className="s09-cell" style={cellBase}>
+          <p style={labelStyle}>
+            신규 환자 유입<br />월 평균 성장률
+          </p>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.25rem' }}>
+            <p data-target="14" data-suffix="%" style={{
+              ...numberStyle, fontSize: '3rem', color: 'var(--color-primary)',
+            }}>
+              14%
+            </p>
+            <span style={{ fontSize: '1.5rem', color: 'var(--color-primary)' }}>↑</span>
+          </div>
+        </div>
+
+        {/* 연동 플랫폼 */}
+        <div className="s09-cell" style={cellBase}>
+          <p style={labelStyle}>연동 플랫폼</p>
+          <p data-target="7" data-suffix="개" style={{
+            ...numberStyle, fontSize: '3rem',
+          }}>
+            7개
+          </p>
+        </div>
+
+        {/* 주간 예약 중개 — accent */}
+        <div className="s09-cell" style={{
+          ...cellBase,
+          background: 'var(--color-primary)',
+          color: 'white',
+        }}>
+          <p style={{ ...labelStyle, color: 'rgba(255,255,255,0.7)' }}>
+            매주 플랫폼<br />환자 예약 중개
+          </p>
+          <p data-target="34000" data-suffix="건" style={{
+            ...numberStyle, fontSize: '3rem', color: 'white',
+          }}>
+            34,000건
+          </p>
+        </div>
+
+        {/* 누적 예약 건 수 */}
+        <div className="s09-cell" style={cellBase}>
+          <p style={labelStyle}>누적 예약<br />중개 건 수</p>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.625rem' }}>
+            <p data-target="160" data-suffix="만+" style={{
+              ...numberStyle, fontSize: '3rem',
+            }}>
+              160만+
+            </p>
+            <span style={{
+              fontSize: '0.6875rem', fontWeight: 700,
+              color: 'var(--color-primary)',
+              background: 'var(--color-primary-light)',
+              padding: '0.2rem 0.625rem',
+              borderRadius: '2rem',
+              whiteSpace: 'nowrap',
+            }}>
+              매월 증가 중
+            </span>
+          </div>
         </div>
       </div>
     </SlideLayout>
