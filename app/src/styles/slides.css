@@ -5,6 +5,11 @@
   overflow-y: scroll;
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
+  scrollbar-width: none; /* Firefox */
+}
+
+.slide-container::-webkit-scrollbar {
+  display: none; /* Chrome, Edge, Safari */
 }
 
 /* Individual slide */
