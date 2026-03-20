@@ -29,8 +29,8 @@ const DATA_SOURCES = [
   {
     label: 'EMR',
     desc: '내원·접수·진료',
-    color: '#0ea5e9',
-    bg: '#f0f9ff',
+    color: '#f97316',
+    bg: '#fff7ed',
     steps: [3, 4],
   },
 ]

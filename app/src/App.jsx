@@ -17,7 +17,6 @@ import Slide09_DoctalkResults from './components/slides/Slide09_DoctalkResults'
 import Slide10b_TrackingOverviewAlt from './components/slides/Slide10b_TrackingOverviewAlt'
 import Slide10c_FullFunnel from './components/slides/Slide10c_FullFunnel'
 import Slide11_DataConvergence from './components/slides/Slide11_DataConvergence'
-import Slide11b_BookingDataFlow from './components/slides/Slide11b_BookingDataFlow'
 import Slide12_DataInsights from './components/slides/Slide12_DataInsights'
 import Slide13_AdReviewProblem from './components/slides/Slide13_AdReviewProblem'
 import Slide14_AiReviewSolution from './components/slides/Slide14_AiReviewSolution'
@@ -30,12 +29,12 @@ import Slide17_OutroVision from './components/slides/Slide17_OutroVision'
 
 function App() {
   const containerRef = useRef(null)
-  const { activeSlide, scrollToSlide } = useScrollSnap(containerRef, 25)
+  const { activeSlide, scrollToSlide } = useScrollSnap(containerRef, 24)
 
   return (
     <div ref={containerRef} className="slide-container">
       <ScrollIndicator
-        totalSlides={25}
+        totalSlides={24}
         activeSlide={activeSlide}
         onDotClick={scrollToSlide}
       />
@@ -54,7 +53,6 @@ function App() {
       <Slide10b_TrackingOverviewAlt />
       <Slide10c_FullFunnel />
       <Slide11_DataConvergence />
-      <Slide11b_BookingDataFlow />
       <Slide12_DataInsights />
       <Slide13_AdReviewProblem />
       <Slide14_AiReviewSolution />

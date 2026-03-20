@@ -4,13 +4,13 @@ import useSlideAnimation from '../../hooks/useSlideAnimation'
 const BASE = import.meta.env.BASE_URL
 
 const PLATFORMS = [
-  { name: '네이버', logo: `${BASE}images/logos/네이버 로고.png`, size: '5.5rem' },
-  { name: '카카오', logo: `${BASE}images/logos/카카오 로고.png`, size: '4.5rem' },
-  { name: '당근', logo: `${BASE}images/logos/당근 로고.png`, size: '4.5rem' },
-  { name: '강남언니', logo: `${BASE}images/logos/강남언니 로고.png`, size: '5.5rem' },
-  { name: '구글', logo: `${BASE}images/logos/구글 로고.png`, size: '4.5rem' },
-  { name: '블라인드', logo: `${BASE}images/logos/블라인드 로고.png`, size: '4.5rem', upcoming: true },
-  { name: '키즈노트', logo: `${BASE}images/logos/키즈노트 로고.png`, size: '5.5rem', upcoming: true },
+  { name: '네이버', logo: `${BASE}images/logos/네이버 로고.png`, size: 'clamp(4rem, 7vh, 9rem)' },
+  { name: '카카오', logo: `${BASE}images/logos/카카오 로고.png`, size: 'clamp(3.25rem, 5.5vh, 7rem)' },
+  { name: '당근', logo: `${BASE}images/logos/당근 로고.png`, size: 'clamp(3.25rem, 5.5vh, 7rem)' },
+  { name: '강남언니', logo: `${BASE}images/logos/강남언니 로고.png`, size: 'clamp(4rem, 7vh, 9rem)' },
+  { name: '구글', logo: `${BASE}images/logos/구글 로고.png`, size: 'clamp(3.25rem, 5.5vh, 7rem)' },
+  { name: '블라인드', logo: `${BASE}images/logos/블라인드 로고.png`, size: 'clamp(3.25rem, 5.5vh, 7rem)', upcoming: true },
+  { name: '키즈노트', logo: `${BASE}images/logos/키즈노트 로고.png`, size: 'clamp(4rem, 7vh, 9rem)', upcoming: true },
 ]
 
 const LINES_PER_PLATFORM = 6
@@ -77,15 +77,26 @@ export default function Slide11_DataConvergence() {
   }, [])
 
   useEffect(() => {
-    // Initial measure after layout
-    const timer = setTimeout(measureAndBuild, 100)
+    // Measure multiple times to handle layout shifts
+    const timers = [100, 300, 600, 1200].map((ms) =>
+      setTimeout(measureAndBuild, ms)
+    )
 
     const handleResize = () => measureAndBuild()
     window.addEventListener('resize', handleResize)
 
+    // Also re-measure when scroll container scrolls (slide becomes visible)
+    const scrollContainer = sectionRef.current?.closest('.slide-container')
+    if (scrollContainer) {
+      scrollContainer.addEventListener('scroll', handleResize)
+    }
+
     return () => {
-      clearTimeout(timer)
+      timers.forEach(clearTimeout)
       window.removeEventListener('resize', handleResize)
+      if (scrollContainer) {
+        scrollContainer.removeEventListener('scroll', handleResize)
+      }
     }
   }, [measureAndBuild])
 
@@ -141,8 +152,8 @@ export default function Slide11_DataConvergence() {
         .s11-ripple:nth-child(3) { animation-delay: 3s; }
         .s11-ripple:nth-child(4) { animation-delay: 4.5s; }
         @keyframes s11ripple {
-          0% { width: 110px; height: 110px; opacity: 1; }
-          100% { width: 700px; height: 700px; opacity: 0; }
+          0% { width: 14vh; height: 14vh; opacity: 1; }
+          100% { width: 80vh; height: 80vh; opacity: 0; }
         }
       `}</style>
 
@@ -193,19 +204,19 @@ export default function Slide11_DataConvergence() {
         {/* Title */}
         <div className="s11-title" style={{
           textAlign: 'center', marginBottom: '1rem',
-          position: 'absolute', top: '2.5rem', left: '50%',
+          position: 'absolute', top: '8%', left: '50%',
           transform: 'translateX(-50%)', width: '100%',
           zIndex: 5,
         }}>
           <p style={{
-            fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.15em',
+            fontSize: 'clamp(0.625rem, 1.2vh, 1rem)', fontWeight: 700, letterSpacing: '0.15em',
             textTransform: 'uppercase', color: 'var(--color-primary)',
             marginBottom: '1rem',
           }}>
             DATA CONVERGENCE
           </p>
           <h2 style={{
-            fontSize: '2rem', fontWeight: 800, color: '#0f172a',
+            fontSize: 'clamp(1.5rem, 3vh, 3rem)', fontWeight: 800, color: '#0f172a',
             lineHeight: 1.35, letterSpacing: '-0.02em',
           }}>
             각 플랫폼의 예약과 광고 데이터가 닥톡에 모이면,<br />
@@ -217,9 +228,9 @@ export default function Slide11_DataConvergence() {
         <div style={{
           position: 'absolute', left: '1.5rem', top: 0, bottom: 0,
           display: 'flex', flexDirection: 'column',
-          justifyContent: 'center', gap: '1rem',
+          justifyContent: 'center', gap: 'clamp(0.375rem, 1vh, 1.5rem)',
           alignItems: 'flex-end',
-          width: '5rem',
+          width: 'clamp(4rem, 7vh, 10rem)',
           zIndex: 3,
         }}>
           {PLATFORMS.map((p, i) => (
@@ -250,7 +261,7 @@ export default function Slide11_DataConvergence() {
           <div style={{
             position: 'relative',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            width: '110px', height: '110px',
+            width: 'clamp(80px, 14vh, 200px)', height: 'clamp(80px, 14vh, 200px)',
           }}>
             <div className="s11-ripple" style={{ top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }} />
             <div className="s11-ripple" style={{ top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }} />
@@ -258,13 +269,13 @@ export default function Slide11_DataConvergence() {
             <div className="s11-ripple" style={{ top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }} />
 
             <div ref={hubRef} className="s11-hub s11-hub-core" style={{
-              width: '110px', height: '110px', borderRadius: '50%',
+              width: '100%', height: '100%', borderRadius: '50%',
               background: 'linear-gradient(135deg, var(--color-primary), #1a9d6f)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               position: 'relative', zIndex: 2,
             }}>
               <span style={{
-                fontSize: '1.125rem', fontWeight: 800, color: 'white',
+                fontSize: 'clamp(0.875rem, 2vh, 1.75rem)', fontWeight: 800, color: 'white',
                 letterSpacing: '0.02em',
               }}>
                 닥톡
@@ -273,8 +284,8 @@ export default function Slide11_DataConvergence() {
           </div>
 
           <div className="s11-hub-text" style={{ textAlign: 'center' }}>
-            <p style={{ fontSize: '1.375rem', fontWeight: 800, color: '#0f172a' }}>닥톡광고</p>
-            <p style={{ fontSize: '0.8125rem', color: '#94a3b8', lineHeight: 1.5 }}>
+            <p style={{ fontSize: 'clamp(1.125rem, 2.2vh, 2rem)', fontWeight: 800, color: '#0f172a' }}>데이터 허브</p>
+            <p style={{ fontSize: 'clamp(0.6875rem, 1.3vh, 1.125rem)', color: '#94a3b8', lineHeight: 1.5 }}>
               자연유입 + 광고유입<br />예약 데이터 통합
             </p>
           </div>
@@ -282,7 +293,7 @@ export default function Slide11_DataConvergence() {
 
         {/* Legend */}
         <div className="s11-legend" style={{
-          position: 'absolute', bottom: '2.5rem', left: '50%',
+          position: 'absolute', bottom: '15%', left: '50%',
           transform: 'translateX(-50%)',
           display: 'flex', alignItems: 'center', gap: '2rem',
           zIndex: 3,
