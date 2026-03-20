@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useState, useEffect, useCallback } from 'react'
 import useSlideAnimation from '../../hooks/useSlideAnimation'
 
 const BASE = import.meta.env.BASE_URL
@@ -13,39 +13,30 @@ const PLATFORMS = [
   { name: '키즈노트', logo: `${BASE}images/logos/키즈노트 로고.png`, size: '5.5rem', upcoming: true },
 ]
 
-const HUB_X = 850
-const HUB_Y = 350
+const LINES_PER_PLATFORM = 6
 
-function buildAllPaths() {
+function buildPaths(logoPositions, hubPos) {
+  if (!logoPositions.length || !hubPos) return []
+
   const paths = []
-  const sourceXBase = 100
-  const totalPlatforms = PLATFORMS.length
-  // Logos are vertically centered in the viewport, roughly from 20% to 80% of 700
-  const topMargin = 155
-  const bottomMargin = 155
-  const usableHeight = 700 - topMargin - bottomMargin
-  const verticalSpacing = usableHeight / (totalPlatforms - 1)
+  logoPositions.forEach((pos, pi) => {
+    for (let li = 0; li < LINES_PER_PLATFORM; li++) {
+      const spread = 30
+      const offsetY = (li - (LINES_PER_PLATFORM - 1) / 2) * (spread / LINES_PER_PLATFORM)
+      const startX = pos.x
+      const startY = pos.y + offsetY
+      const wobble = (li % 2 === 0 ? 1 : -1) * (10 + li * 5)
 
-  PLATFORMS.forEach((_, pi) => {
-    const sourceY = topMargin + pi * verticalSpacing
-    const linesPerPlatform = 6
-
-    for (let li = 0; li < linesPerPlatform; li++) {
-      const spread = 55
-      const offsetY = (li - (linesPerPlatform - 1) / 2) * (spread / linesPerPlatform)
-      const startY = sourceY + offsetY
-      const wobble = (li % 2 === 0 ? 1 : -1) * (15 + li * 8)
-
-      const cp1x = 220 + li * 25 + pi * 10
+      const dx = hubPos.x - startX
+      const cp1x = startX + dx * 0.25 + li * 8
       const cp1y = startY + wobble
-      const cp2x = 550 + li * 15
-      const cp2y = HUB_Y + (startY - HUB_Y) * 0.15 + (li % 2 === 0 ? 10 : -10)
+      const cp2x = startX + dx * 0.65 + li * 5
+      const cp2y = hubPos.y + (startY - hubPos.y) * 0.15 + (li % 2 === 0 ? 8 : -8)
 
-      // First half = organic, second half = paid
-      const isOrganic = li < linesPerPlatform / 2
+      const isOrganic = li < LINES_PER_PLATFORM / 2
 
       paths.push({
-        d: `M ${sourceXBase},${startY} C ${cp1x},${cp1y} ${cp2x},${cp2y} ${HUB_X},${HUB_Y}`,
+        d: `M ${startX},${startY} C ${cp1x},${cp1y} ${cp2x},${cp2y} ${hubPos.x},${hubPos.y}`,
         lineIndex: li,
         type: isOrganic ? 'organic' : 'paid',
       })
@@ -54,40 +45,81 @@ function buildAllPaths() {
   return paths
 }
 
-const ALL_PATHS = buildAllPaths()
-
 export default function Slide11_DataConvergence() {
-  const ref = useRef(null)
+  const sectionRef = useRef(null)
+  const logoRefs = useRef([])
+  const hubRef = useRef(null)
+  const [paths, setPaths] = useState([])
 
-  useSlideAnimation(ref, (gsap) => {
+  const measureAndBuild = useCallback(() => {
+    const section = sectionRef.current
+    if (!section) return
+
+    const rect = section.getBoundingClientRect()
+    const positions = logoRefs.current.map((el) => {
+      if (!el) return null
+      const r = el.getBoundingClientRect()
+      return {
+        x: r.right - rect.left + 10, // right edge of logo + small gap
+        y: r.top + r.height / 2 - rect.top, // vertical center
+      }
+    }).filter(Boolean)
+
+    const hub = hubRef.current
+    if (!hub) return
+    const hr = hub.getBoundingClientRect()
+    const hubPos = {
+      x: hr.left + hr.width / 2 - rect.left,
+      y: hr.top + hr.height / 2 - rect.top,
+    }
+
+    setPaths(buildPaths(positions, hubPos))
+  }, [])
+
+  useEffect(() => {
+    // Initial measure after layout
+    const timer = setTimeout(measureAndBuild, 100)
+
+    const handleResize = () => measureAndBuild()
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      clearTimeout(timer)
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [measureAndBuild])
+
+  useSlideAnimation(sectionRef, (gsap) => {
     const tl = gsap.timeline({
-      scrollTrigger: { trigger: ref.current, start: 'top 80%' },
+      scrollTrigger: { trigger: sectionRef.current, start: 'top 80%' },
     })
 
     tl.from('.s11-title', { opacity: 0, y: 30, duration: 0.7 })
       .from('.s11-platform', { opacity: 0, x: -20, stagger: 0.05, duration: 0.4 }, '-=0.3')
 
-    const paths = ref.current.querySelectorAll('.s11-path')
-    paths.forEach((path) => {
-      const length = path.getTotalLength()
-      gsap.set(path, { strokeDasharray: length, strokeDashoffset: length })
-    })
+    // Delay path animation to let measure complete
+    tl.add(() => {
+      const svgPaths = sectionRef.current?.querySelectorAll('.s11-path')
+      if (!svgPaths) return
+      svgPaths.forEach((path) => {
+        const length = path.getTotalLength()
+        gsap.set(path, { strokeDasharray: length, strokeDashoffset: length })
+        gsap.to(path, {
+          strokeDashoffset: 0,
+          duration: 2,
+          ease: 'power2.inOut',
+          delay: Math.random() * 0.8,
+        })
+      })
+    }, '-=0.3')
 
-    tl.to('.s11-path', {
-      strokeDashoffset: 0,
-      duration: 2,
-      ease: 'power2.inOut',
-      stagger: { amount: 0.8, from: 'random' },
-    }, '-=0.5')
-
-    tl.from('.s11-hub', { opacity: 0, scale: 0, duration: 0.6, ease: 'back.out(1.7)' }, '-=0.8')
+    tl.from('.s11-hub', { opacity: 0, scale: 0, duration: 0.6, ease: 'back.out(1.7)' }, '+=0.5')
       .from('.s11-hub-text', { opacity: 0, y: 10, duration: 0.5 }, '-=0.3')
       .from('.s11-legend', { opacity: 0, y: 10, duration: 0.4 }, '-=0.2')
-      .from('.s11-bottom', { opacity: 0, duration: 0.5 }, '-=0.2')
   })
 
   return (
-    <section id="slide-11" ref={ref} className="slide" style={{
+    <section id="slide-11" ref={sectionRef} className="slide" style={{
       background: 'white',
       position: 'relative', overflow: 'hidden',
     }}>
@@ -114,10 +146,10 @@ export default function Slide11_DataConvergence() {
         }
       `}</style>
 
-      {/* SVG convergence lines */}
-      <svg viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid slice" style={{
+      {/* SVG — same size as section, coordinates match DOM pixels */}
+      <svg style={{
         position: 'absolute', inset: 0, width: '100%', height: '100%',
-        zIndex: 1,
+        zIndex: 1, pointerEvents: 'none',
       }}>
         <defs>
           <linearGradient id="lineGradOrganic" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -132,7 +164,7 @@ export default function Slide11_DataConvergence() {
           </linearGradient>
         </defs>
 
-        {ALL_PATHS.map((p, i) => (
+        {paths.map((p, i) => (
           <g key={i}>
             <path
               className="s11-path"
@@ -141,7 +173,6 @@ export default function Slide11_DataConvergence() {
               stroke={p.type === 'organic' ? 'url(#lineGradOrganic)' : 'url(#lineGradPaid)'}
               strokeWidth={1.2 + p.lineIndex * 0.2}
             />
-            {/* Data particle traveling along the path */}
             <circle
               r={2 + p.lineIndex * 0.3}
               fill={p.type === 'organic' ? '#6366f1' : '#2fd096'}
@@ -182,7 +213,7 @@ export default function Slide11_DataConvergence() {
           </h2>
         </div>
 
-        {/* Platform logos — left side, no text */}
+        {/* Platform logos */}
         <div style={{
           position: 'absolute', left: '1.5rem', top: 0, bottom: 0,
           display: 'flex', flexDirection: 'column',
@@ -191,10 +222,15 @@ export default function Slide11_DataConvergence() {
           width: '5rem',
           zIndex: 3,
         }}>
-          {PLATFORMS.map((p) => (
-            <div key={p.name} className="s11-platform" style={{
-              display: 'flex', flexDirection: 'column', alignItems: 'center',
-            }}>
+          {PLATFORMS.map((p, i) => (
+            <div
+              key={p.name}
+              className="s11-platform"
+              ref={(el) => (logoRefs.current[i] = el)}
+              style={{
+                display: 'flex', flexDirection: 'column', alignItems: 'center',
+              }}
+            >
               <img src={p.logo} alt={p.name} style={{
                 width: p.size, height: p.size, objectFit: 'contain',
                 ...(p.upcoming ? { filter: 'grayscale(1)', opacity: 0.5 } : {}),
@@ -203,7 +239,7 @@ export default function Slide11_DataConvergence() {
           ))}
         </div>
 
-        {/* Hub — right center + ripple */}
+        {/* Hub */}
         <div style={{
           position: 'absolute',
           right: '10%', top: '54%',
@@ -221,7 +257,7 @@ export default function Slide11_DataConvergence() {
             <div className="s11-ripple" style={{ top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }} />
             <div className="s11-ripple" style={{ top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }} />
 
-            <div className="s11-hub s11-hub-core" style={{
+            <div ref={hubRef} className="s11-hub s11-hub-core" style={{
               width: '110px', height: '110px', borderRadius: '50%',
               background: 'linear-gradient(135deg, var(--color-primary), #1a9d6f)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -246,7 +282,7 @@ export default function Slide11_DataConvergence() {
 
         {/* Legend */}
         <div className="s11-legend" style={{
-          position: 'absolute', bottom: '5rem', left: '50%',
+          position: 'absolute', bottom: '2.5rem', left: '50%',
           transform: 'translateX(-50%)',
           display: 'flex', alignItems: 'center', gap: '2rem',
           zIndex: 3,
@@ -270,7 +306,6 @@ export default function Slide11_DataConvergence() {
             </span>
           </div>
         </div>
-
       </div>
     </section>
   )
