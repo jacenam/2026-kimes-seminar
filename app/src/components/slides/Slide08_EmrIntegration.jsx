@@ -93,7 +93,7 @@ export default function Slide08_EmrIntegration() {
       <div className="s08-header" style={{ textAlign: 'center', marginBottom: '3rem' }}>
         <p className="section-label">EMR NETWORK</p>
         <h2 className="section-title">
-          데이터 연결의 확장: 32개 전자차트사 연동
+          인프라 확장: 32개 전자차트사 연동
         </h2>
         <p style={{
           fontSize: '1.125rem', fontWeight: 500, color: '#64748b', lineHeight: 1.7,

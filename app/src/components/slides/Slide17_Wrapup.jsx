@@ -199,7 +199,7 @@ export default function Slide17_Wrapup() {
               </text>
 
               {/* Phase */}
-              <text x={CX[i]} y={CY+20} textAnchor="middle" fontSize="14" fontWeight="600" fill="#94a3b8">
+              <text x={CX[i]} y={CY+24} textAnchor="middle" fontSize="16" fontWeight="700" fill="#0f172a">
                 {item.phase}
               </text>
             </g>

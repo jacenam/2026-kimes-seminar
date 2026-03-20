@@ -157,7 +157,7 @@ export default function Slide09_DoctalkResults() {
           <p style={labelStyle}>누적 예약<br />중개 건 수</p>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.625rem' }}>
             <p data-target="160" data-suffix="만+" style={{
-              ...numberStyle, fontSize: '3rem',
+              ...numberStyle, fontSize: '3rem', whiteSpace: 'nowrap',
             }}>
               160만+
             </p>
