@@ -30,7 +30,7 @@ export default function Slide07_PlatformExpansion() {
       <div className="s07-header" style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
         <p className="section-label">PLATFORM EXPANSION</p>
         <h2 className="section-title">
-          인프라 확장: 멀티 플랫폼 통합 중개
+          <span style={{ color: 'var(--color-primary)' }}>데이터 연결 2:</span> 멀티 플랫폼 통합 중개
         </h2>
       </div>
 

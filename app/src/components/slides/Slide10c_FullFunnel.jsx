@@ -82,7 +82,7 @@ export default function Slide10c_FullFunnel() {
       <div className="s10c-header" style={{ marginBottom: '2.5rem' }}>
         <p className="section-label">FULL-FUNNEL TRACKING</p>
         <h2 className="section-title">
-          인프라가 연결되면, 비로소 정교한 분석이 가능합니다
+          예약 데이터가 연결되면, 비로소 정교한 분석이 가능합니다
         </h2>
         <p className="section-subtitle" style={{ marginBottom: 0 }}>
           플랫폼 · 닥톡예약 · EMR — 세 데이터가 하나로 연결될 때, 광고 여정의 풀 사이클 트래킹이 실현됩니다
