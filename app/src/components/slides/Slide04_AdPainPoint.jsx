@@ -22,7 +22,6 @@ export default function Slide04_AdPainPoint() {
     tl.from('.s04-header', { opacity: 0, y: 30, duration: 0.6 })
       .from('.s04-quote-0', { opacity: 0, x: -30, duration: 0.7 }, '+=0.2')
       .from('.s04-quote-1', { opacity: 0, x: -30, duration: 0.7 }, '+=0.3')
-      .from('.s04-agency', { opacity: 0, y: 30, duration: 0.6 }, '+=0.2')
   })
 
   return (
@@ -30,7 +29,6 @@ export default function Slide04_AdPainPoint() {
       <div className="s04-header">
         <p className="section-label" style={{ color: '#e11d48' }}>PAIN POINT</p>
         <h2 className="section-title">
-          <WarningAlt size={32} style={{ verticalAlign: 'middle', marginRight: '0.5rem', color: '#f59e0b' }} />
           광고비의 역설
         </h2>
       </div>
@@ -55,25 +53,6 @@ export default function Slide04_AdPainPoint() {
         ))}
       </div>
 
-      <div
-        className="s04-agency"
-        style={{
-          background: '#fff7ed',
-          borderRadius: '1rem',
-          padding: '2rem 2.5rem',
-          border: '1px solid #fed7aa',
-        }}
-      >
-        <p style={{ fontWeight: 700, fontSize: '1.125rem', color: '#c2410c', marginBottom: '0.75rem' }}>
-          <WarningAlt size={20} style={{ verticalAlign: 'middle', marginRight: '0.5rem' }} />
-          광고 에이전시도 답답하긴 마찬가지
-        </p>
-        <p style={{ color: '#78350f', fontSize: '0.9375rem', lineHeight: 1.7 }}>
-          광고 전문 에이전시 역시 광고 집행 전후의 내원 환자 수를 대략적으로 비교하는 것이 대부분입니다.
-          <br />
-          정확히 어떤 광고가 실제 예약과 내원으로 이어졌는지 추적하기 어렵기 때문입니다.
-        </p>
-      </div>
     </SlideLayout>
   )
 }

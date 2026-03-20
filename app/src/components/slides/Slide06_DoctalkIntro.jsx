@@ -48,8 +48,7 @@ export default function Slide06_DoctalkIntro() {
             fontSize: '2.75rem', fontWeight: 900, color: '#0f172a',
             lineHeight: 1.3, letterSpacing: '-0.02em',
           }}>
-            흩어진 예약 창구를 하나로,{' '}
-            <span style={{ color: 'var(--color-primary)' }}>닥톡예약</span>
+            <span style={{ color: 'var(--color-primary)' }}>인프라 연결의 시작:</span> 온라인 예약과 EMR 연동
           </h2>
         </div>
 

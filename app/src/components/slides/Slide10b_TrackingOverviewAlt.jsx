@@ -60,7 +60,7 @@ export default function Slide10b_TrackingOverviewAlt() {
     <SlideLayout id="slide-10b" ref={ref}>
       {/* Header */}
       <div className="s10b-header" style={{ marginBottom: '3rem' }}>
-        <p className="section-label">AD TRACKING PROBLEM</p>
+        <p className="section-label" style={{ color: '#e11d48' }}>AD TRACKING PROBLEM</p>
         <h2 className="section-title">광고의 '진짜 성과'를 알 수 없는 구조</h2>
         <p className="section-subtitle" style={{ marginBottom: 0 }}>
           기존 광고 집행 플로우에서는 클릭 이후의 환자 여정을 추적할 수 없습니다
@@ -173,8 +173,7 @@ export default function Slide10b_TrackingOverviewAlt() {
         textAlign: 'center', fontSize: '1.125rem', fontWeight: 600,
         color: '#64748b', lineHeight: 1.7, marginTop: '2.5rem',
       }}>
-        광고비를 쓰고 있지만, 그 광고가 실제 환자를 데려왔는지{' '}
-        <strong style={{ color: '#0f172a' }}>알기 어렵습니다</strong>
+        광고비를 쓰고 있지만, 그 광고가 <strong style={{ color: '#0f172a' }}>실제 환자를 데려왔는지</strong> 알기 어렵습니다
       </p>
     </SlideLayout>
   )
