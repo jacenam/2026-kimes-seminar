@@ -43,6 +43,7 @@ function App() {
       <Slide02b_AdChannels />
       <Slide03_MarketSize />
       <Slide04_AdPainPoint />
+      <Slide10b_TrackingOverviewAlt />
       <Slide05_DataSilo />
       <Slide06_DoctalkIntro />
       <Slide07_PlatformExpansion />
@@ -50,7 +51,6 @@ function App() {
       <Slide08c_SlotSync />
       <Slide08_EmrIntegration />
       <Slide09_DoctalkResults />
-      <Slide10b_TrackingOverviewAlt />
       <Slide10c_FullFunnel />
       <Slide11_DataConvergence />
       <Slide12_DataInsights />
